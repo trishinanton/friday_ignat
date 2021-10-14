@@ -1,0 +1,46 @@
+.menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 250px;
+    /*transform: translateX(-35px);*/
+    transition: 0.3s linear;
+}
+menu:hover {
+        transform: translateX(0px);
+    }
+menu_item{
+        margin-right: 10px;
+    }
+menu_btn {
+    color: gray;
+    transition: 0.3s linear;
+    border: 1px solid gray;
+    border-radius: 2px;
+    width: 50px;
+    text-align: center;
+}
+menu_btn:hover{
+            cursor: pointer;
+            color: brown;
+            border: 1px solid gray;
+            background-color: bisque;
+        }
+
+
+
+
+
+
+a{
+    text-decoration: none;
+    color: gray;
+    transition: 0.3s linear;
+    margin-right: 10px;
+}
+    a:hover{
+        cursor: pointer;
+        color: deepskyblue;
+
+    }
+

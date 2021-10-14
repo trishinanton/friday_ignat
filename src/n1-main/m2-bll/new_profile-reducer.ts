@@ -1,8 +1,7 @@
-
 const initialState = {
     login:true
 }
-export const LoginReducer = (initialState:any= {}, action:any)=>{
+export const NewProfileReducer = (initialState:any= {}, action:any)=>{
     switch (action.type){
         case 'SET-LOGIN':
             return {...{}}
