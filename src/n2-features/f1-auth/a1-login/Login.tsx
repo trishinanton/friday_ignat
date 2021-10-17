@@ -1,5 +1,5 @@
 import style from "../a2-sign_up/SignUp.module.scss";
-import React from "react";
+import React, {useEffect} from "react";
 import InputLabel from "@mui/material/InputLabel/InputLabel";
 import Input from "@mui/material/Input";
 import FormControl from "@mui/material/FormControl/FormControl";
@@ -18,6 +18,18 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 
 export const Login = ()=>{
+    useEffect(()=>{
+        //@ts-ignore
+        window.gapi.load('auth2', function() {
+            /* библиотека загрузилась */
+            //@ts-ignore
+            window.gapi.auth2.init({
+                client_id: '372303875667-nlvppvulrt4kevh9ld3ieh5jh3n146bu.apps.googleusercontent.com',
+
+            })
+                .then(()=>console.log('init OK'), ()=>console.log('init ERR'))
+        });
+    })
     const dispatch = useDispatch()
     const isLogged = useSelector<AppRootStateType, boolean>(state => state.app.logged)
     const error = useSelector<AppRootStateType, string | null>(state => state.login.error);
@@ -33,7 +45,8 @@ export const Login = ()=>{
         showConfirmPassword: boolean;
         disabled: boolean;
         remember: boolean;
-        turnOnSignUp: boolean
+        turnOnSignUp: boolean;
+        userName: string | null
     }
     const [values, setValues] = React.useState<State>({
         amount: '',
@@ -46,7 +59,8 @@ export const Login = ()=>{
         showConfirmPassword: false,
         disabled: false,
         remember: true,
-        turnOnSignUp: false
+        turnOnSignUp: false,
+        userName: null
     });
     const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +80,22 @@ export const Login = ()=>{
     };
     const sendData = () => {
         dispatch(loginTC(values.email,values.password,values.remember))
+    }
+    const signIn = () =>{
+        //@ts-ignore
+        const _authOK = user=>{
+            const userGoogle = user.getBasicProfile().getName()
+            console.log(userGoogle)
+            setValues((v)=>({...v,userName: userGoogle }))
+            // user.getBasicProfile().getName()
+        }
+        const _authErr=()=>{
+            console.log('Auth Err')
+        }
+        //@ts-ignore
+        const GoogleAuth = window.gapi.auth2.getAuthInstance()
+        GoogleAuth.signIn({scope: 'profile email'})
+            .then(_authOK,_authErr )
     }
 
     if (isLogged) {
@@ -88,6 +118,7 @@ export const Login = ()=>{
             </Box> :<div className={style.register}>
                 <div className={style.description}>It-incubator</div>
                 <h1>Sign In</h1>
+                {values.userName && <span className={s.user}>Hello, {values.userName}</span>}
                 <FormControl sx={{m: 1, width: '80%'}} variant="standard">
                     <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
                     <Input
@@ -121,6 +152,7 @@ export const Login = ()=>{
 
                 <a className={s.forgot}>Forgot Password</a>
                 <Button sx={{ width: '80%'}} disabled={values.disabled} onClick={sendData} variant="contained" size="medium">Login</Button>
+                <Button sx={{ width: '80%', marginTop: '10px'}} disabled={values.disabled} onClick={signIn} variant="contained" size="medium">Login with google</Button>
                 <div className={s.descr}>Don’t have an account?</div>
                 <a className={s.sign} onClick={()=>setValues(v=>({...v,turnOnSignUp: true}))}>Sign Up</a>
             </div>
