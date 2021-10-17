@@ -3,24 +3,23 @@ import React from "react";
 import InputLabel from "@mui/material/InputLabel/InputLabel";
 import Input from "@mui/material/Input";
 import FormControl from "@mui/material/FormControl/FormControl";
-import {Box, Button, Checkbox, IconButton, InputAdornment} from "@mui/material";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {signUpTC} from "../../../n1-main/m2-bll/sign_up-reducer";
-import s from './Login.module.scss'
+import {Box, Button, IconButton, InputAdornment} from "@mui/material";
 import {loginTC} from "../../../n1-main/m2-bll/login-reducer";
+import s from './Forgot.module.scss'
+import { createNewPasswordTC, forgotTC} from "../../../n1-main/m2-bll/forgot-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {Redirect} from "react-router-dom";
 import {PATH} from "../../../n1-main/m1-ui/routes/Routes";
+import {Redirect} from "react-router-dom";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Visibility from "@mui/icons-material/Visibility";
 import {AppRootStateType} from "../../../n1-main/m2-bll/b1-srore/redux-store";
-import {RequestStatusType} from "../../../n1-main/m2-bll/app-reducer";
 import CircularProgress from "@mui/material/CircularProgress";
+import {RequestStatusType} from "../../../n1-main/m2-bll/app-reducer";
 
-
-export const Login = ()=>{
+export const CreatePassword = () =>{
     const dispatch = useDispatch()
-    const isLogged = useSelector<AppRootStateType, boolean>(state => state.app.logged)
-    const error = useSelector<AppRootStateType, string | null>(state => state.login.error);
+    const success = useSelector<AppRootStateType, boolean>(state => state.forgot.success);
+    const errorPassword = useSelector<AppRootStateType, string |null>(state => state.forgot.errorNewPassword);
     const loading = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status);
     interface State {
         amount: string;
@@ -33,7 +32,9 @@ export const Login = ()=>{
         showConfirmPassword: boolean;
         disabled: boolean;
         remember: boolean;
-        turnOnSignUp: boolean
+        from:string;
+        redirect: boolean;
+        token: string
     }
     const [values, setValues] = React.useState<State>({
         amount: '',
@@ -46,9 +47,10 @@ export const Login = ()=>{
         showConfirmPassword: false,
         disabled: false,
         remember: true,
-        turnOnSignUp: false
+        from: 'test-front-admin <ai73a@yandex.by>',
+        redirect: false,
+        token: 'cd10a930-2ecc-11ec-923a-dd8cf4ece234'
     });
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({...values, [prop]: event.target.value});
     };
@@ -61,18 +63,14 @@ export const Login = ()=>{
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
-    const handleChangeCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValues(values =>({...values, remember:event.target.checked}));
-    };
     const sendData = () => {
-        dispatch(loginTC(values.email,values.password,values.remember))
+        dispatch(createNewPasswordTC(values.password,values.token))
     }
-
-    if (isLogged) {
-        return <Redirect to={PATH.PROFILE}/>
+    if (values.redirect){
+        return <Redirect to={PATH.LOGIN}/>
     }
-    if (values.turnOnSignUp){
-        return <Redirect to={PATH.REGISTER}/>
+    if (success){
+        return <Redirect to={PATH.PROFILE} />
     }
     return(
         <div>
@@ -87,14 +85,7 @@ export const Login = ()=>{
                 <CircularProgress/>
             </Box> :<div className={style.register}>
                 <div className={style.description}>It-incubator</div>
-                <h1>Sign In</h1>
-                <FormControl sx={{m: 1, width: '80%'}} variant="standard">
-                    <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
-                    <Input
-                        value={values.email}
-                        onChange={handleChange('email')}
-                    />
-                </FormControl>
+                <h1>Create new password</h1>
                 <FormControl sx={{m: 1, width: '80%'}} variant="standard">
                     <InputLabel htmlFor="standard-adornment-password">Password</InputLabel>
                     <Input
@@ -115,15 +106,15 @@ export const Login = ()=>{
                         }
                     />
                 </FormControl>
-                <div className={s.remember}>
-                    <Checkbox {...label} checked={values.remember}  onChange={handleChangeCheckBox}/><div>Remember Me</div>
+                <div className={s.enter}>Create new password and we will send you further instructions to email</div>
+                <div style={{position: 'relative', display:'flex', flexDirection: 'column', width:'100%', alignItems: 'center'}}>
+                    {errorPassword && <div className={style.error}>{errorPassword}</div>}
+                    <Button sx={{ width: '80%'}} disabled={values.disabled} onClick={sendData} variant="contained" size="medium">Create new password</Button>
                 </div>
 
-                <a className={s.forgot}>Forgot Password</a>
-                <Button sx={{ width: '80%'}} disabled={values.disabled} onClick={sendData} variant="contained" size="medium">Login</Button>
-                <div className={s.descr}>Don’t have an account?</div>
-                <a className={s.sign} onClick={()=>setValues(v=>({...v,turnOnSignUp: true}))}>Sign Up</a>
+
             </div>
+
             }
 
         </div>

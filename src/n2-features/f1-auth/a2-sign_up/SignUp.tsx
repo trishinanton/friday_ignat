@@ -1,27 +1,25 @@
-import style from "../a2-sign_up/SignUp.module.scss";
-import React from "react";
-import InputLabel from "@mui/material/InputLabel/InputLabel";
+import React from 'react';
+import style from './SignUp.module.scss'
 import Input from "@mui/material/Input";
-import FormControl from "@mui/material/FormControl/FormControl";
-import {Box, Button, Checkbox, IconButton, InputAdornment} from "@mui/material";
+import FormControl from '@mui/material/FormControl/FormControl';
+import InputLabel from '@mui/material/InputLabel/InputLabel';
+import {Box, Button, FilledInput, IconButton, InputAdornment} from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import {signUpTC} from "../../../n1-main/m2-bll/sign_up-reducer";
-import s from './Login.module.scss'
-import {loginTC} from "../../../n1-main/m2-bll/login-reducer";
 import {useDispatch, useSelector} from "react-redux";
-import {Redirect} from "react-router-dom";
-import {PATH} from "../../../n1-main/m1-ui/routes/Routes";
 import {AppRootStateType} from "../../../n1-main/m2-bll/b1-srore/redux-store";
+import {signUpTC} from "../../../n1-main/m2-bll/sign_up-reducer";
 import {RequestStatusType} from "../../../n1-main/m2-bll/app-reducer";
-import CircularProgress from "@mui/material/CircularProgress";
+import CircularProgress from '@mui/material/CircularProgress';
+import {PATH} from "../../../n1-main/m1-ui/routes/Routes";
+import {Redirect} from "react-router-dom";
 
-
-export const Login = ()=>{
-    const dispatch = useDispatch()
-    const isLogged = useSelector<AppRootStateType, boolean>(state => state.app.logged)
-    const error = useSelector<AppRootStateType, string | null>(state => state.login.error);
+export const SignUp = () => {
+    const error = useSelector<AppRootStateType, string | null>(state => state.sign_up.error);
     const loading = useSelector<AppRootStateType, RequestStatusType>(state => state.app.status);
+    const isLogged = useSelector<AppRootStateType, boolean>(state => state.app.logged)
+    const dispatch = useDispatch()
+
     interface State {
         amount: string;
         password: string;
@@ -32,9 +30,9 @@ export const Login = ()=>{
         showPassword: boolean;
         showConfirmPassword: boolean;
         disabled: boolean;
-        remember: boolean;
-        turnOnSignUp: boolean
+        confirm: boolean;
     }
+
     const [values, setValues] = React.useState<State>({
         amount: '',
         password: '',
@@ -45,10 +43,8 @@ export const Login = ()=>{
         showPassword: false,
         showConfirmPassword: false,
         disabled: false,
-        remember: true,
-        turnOnSignUp: false
+        confirm: true
     });
-    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({...values, [prop]: event.target.value});
     };
@@ -58,23 +54,36 @@ export const Login = ()=>{
             showPassword: !values.showPassword,
         });
     };
+    const handleClickShowConfirmPassword = () => {
+        setValues({
+            ...values,
+            showConfirmPassword: !values.showConfirmPassword,
+        });
+    };
     const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
     };
-    const handleChangeCheckBox = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValues(values =>({...values, remember:event.target.checked}));
+    const handleMouseDownConfirmPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
     };
-    const sendData = () => {
-        dispatch(loginTC(values.email,values.password,values.remember))
-    }
 
+    const sendData = () => {
+        dispatch(signUpTC(values.email, values.password))
+    }
+    const resetData = () =>{
+        setValues(values => ({...values, email: '', password:'',confirmPassword:''}));
+    }
+    const comparePassword = () => {
+        if(values.password != values.confirmPassword){
+            setValues(values => ({...values, confirm: false, disabled:true}))
+        } else{
+            setValues(values => ({...values, confirm: true, disabled: false}));
+        }
+    }
     if (isLogged) {
         return <Redirect to={PATH.PROFILE}/>
     }
-    if (values.turnOnSignUp){
-        return <Redirect to={PATH.REGISTER}/>
-    }
-    return(
+    return (
         <div>
             {loading === 'loading' ? <Box sx={{
                 position: 'absolute',
@@ -85,9 +94,10 @@ export const Login = ()=>{
                 justifyContent: 'center'
             }}>
                 <CircularProgress/>
-            </Box> :<div className={style.register}>
+            </Box> : <div className={style.register}>
                 <div className={style.description}>It-incubator</div>
-                <h1>Sign In</h1>
+                <h1>Sign Up</h1>
+
                 <FormControl sx={{m: 1, width: '80%'}} variant="standard">
                     <InputLabel htmlFor="standard-adornment-password">Email</InputLabel>
                     <Input
@@ -115,16 +125,37 @@ export const Login = ()=>{
                         }
                     />
                 </FormControl>
-                <div className={s.remember}>
-                    <Checkbox {...label} checked={values.remember}  onChange={handleChangeCheckBox}/><div>Remember Me</div>
+                <FormControl sx={{m: 1, width: '80%'}} variant="standard">
+                    <InputLabel htmlFor="standard-adornment-password">Confirm password</InputLabel>
+                    <Input
+                        onBlur={comparePassword}
+                        type={values.showConfirmPassword ? 'text' : 'password'}
+                        value={values.confirmPassword}
+                        onChange={handleChange('confirmPassword')}
+                        endAdornment={
+                            <InputAdornment position="end">
+                                <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={handleClickShowConfirmPassword}
+                                    onMouseDown={handleMouseDownConfirmPassword}
+                                >
+                                    {values.showConfirmPassword ? <VisibilityOff/> : <Visibility/>}
+                                </IconButton>
+                            </InputAdornment>
+                        }
+                    />
+                </FormControl>
+
+                <div className={style.buttons}>
+                    {error && <div className={style.error}>{error}</div>}
+                    {!values.confirm && <div className={style.error}>The passwords don`t match</div>}
+                    <Button onClick={resetData} variant="outlined" size="medium">Cancel</Button>
+                    <Button disabled={values.disabled} onClick={sendData} variant="contained" size="medium">Register</Button>
                 </div>
 
-                <a className={s.forgot}>Forgot Password</a>
-                <Button sx={{ width: '80%'}} disabled={values.disabled} onClick={sendData} variant="contained" size="medium">Login</Button>
-                <div className={s.descr}>Don’t have an account?</div>
-                <a className={s.sign} onClick={()=>setValues(v=>({...v,turnOnSignUp: true}))}>Sign Up</a>
             </div>
             }
+
 
         </div>
     )
