@@ -18,18 +18,18 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 
 export const Login = ()=>{
-    useEffect(()=>{
-        //@ts-ignore
-        window.gapi.load('auth2', function() {
-            /* библиотека загрузилась */
-            //@ts-ignore
-            window.gapi.auth2.init({
-                client_id: '372303875667-nlvppvulrt4kevh9ld3ieh5jh3n146bu.apps.googleusercontent.com',
-
-            })
-                .then(()=>console.log('init OK'), ()=>console.log('init ERR'))
-        });
-    })
+    // useEffect(()=>{
+    //     //@ts-ignore
+    //     window.gapi.load('auth2', function() {
+    //         /* библиотека загрузилась */
+    //         //@ts-ignore
+    //         window.gapi.auth2.init({
+    //             client_id: '372303875667-nlvppvulrt4kevh9ld3ieh5jh3n146bu.apps.googleusercontent.com',
+    //
+    //         })
+    //             .then(()=>console.log('init OK'), ()=>console.log('init ERR'))
+    //     });
+    // })
     const dispatch = useDispatch()
     const isLogged = useSelector<AppRootStateType, boolean>(state => state.app.logged)
     const error = useSelector<AppRootStateType, string | null>(state => state.login.error);

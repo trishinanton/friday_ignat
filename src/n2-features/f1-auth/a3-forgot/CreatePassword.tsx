@@ -49,7 +49,7 @@ export const CreatePassword = () =>{
         remember: true,
         from: 'test-front-admin <ai73a@yandex.by>',
         redirect: false,
-        token: 'cd10a930-2ecc-11ec-923a-dd8cf4ece234'
+        token: 'f3c94d30-3047-11ec-8be6-c9b357e7f7b4'
     });
     const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setValues({...values, [prop]: event.target.value});

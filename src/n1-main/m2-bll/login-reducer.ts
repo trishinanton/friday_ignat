@@ -1,5 +1,5 @@
 import {Dispatch} from "redux";
-import {setAppStatusAC, setIsLoggedInAC} from "./app-reducer";
+import {setAppStatusAC, setIdUserAC, setIsLoggedInAC} from "./app-reducer";
 import {signUpAPI} from "../../n2-features/f1-auth/a2-sign_up/api/sign_up-api";
 import {setSignUpError, setSignUpErrorActionType} from "./sign_up-reducer";
 import {loginAPI} from "../../n2-features/f1-auth/a1-login/api/login-api";
@@ -32,6 +32,7 @@ export const loginTC = (email: string, password:string, rememberMe:boolean) => (
         .then(res =>{
             dispatch(setIsLoggedInAC(true))
             dispatch(setAppStatusAC('succeeded'))
+            dispatch(setIdUserAC(res.data._id))
 
         })
         .catch(error=>{
