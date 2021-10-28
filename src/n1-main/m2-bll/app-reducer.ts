@@ -3,7 +3,7 @@ const initialState: InitialStateType = {
     status: 'idle',
     error: null,
     logged: false,
-    user_id: '616b1e1dee53e41fc82f4cc9'
+    user_id: '5eecf82a3ed8f700042f1186'
 }
 
 export const appReducer = (state: InitialStateType = initialState, action: ActionsType): InitialStateType => {
