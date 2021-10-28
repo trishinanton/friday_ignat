@@ -113,8 +113,8 @@ export const PacksList = () =>{
 
     const cardsPackUpdate = {_id:'617581e2078d82123090325a', name:'Anton Trishin'}
     useEffect(()=>{
-        // myPacks ? dispatch(packsListTC(idUser)): dispatch(packsListTC())
-        dispatch(packsListTC(idUser))
+        myPacks ? dispatch(packsListTC(idUser)): dispatch(packsListTC())
+        // dispatch(packsListTC(idUser))
     },[packName,min,max,sortPacks,page,pageCount,myPacks])
 
     return(
