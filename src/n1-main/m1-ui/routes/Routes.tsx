@@ -8,6 +8,10 @@ import {CreatePassword} from "../../../n2-features/f1-auth/a3-forgot/CreatePassw
 import {Check} from "../../../n2-features/f1-auth/a3-forgot/check/Check";
 import {PacksList} from "../../../n2-features/f2-packs/p1-packs_list/Packs-list";
 import {Card} from "../../../n2-features/f2-packs/p2-card/Card";
+import ModalsPage from "../../../n2-features/f3-modal/ModalsPage";
+import {Learn} from "../../../n2-features/f2-packs/p3-learn/Learn";
+import {File} from "../../../n2-features/f4-file/File";
+
 
 
 export const PATH = {
@@ -19,7 +23,10 @@ export const PATH = {
     CHECK: '/check',
     SET_PASSWORD: '/set-new-password',
     PACKS_LIST: '/packs-list',
-    CARD: '/cards/:id'
+    CARD: '/cards/:id',
+    MODAL: '/modal',
+    LEARN: '/learn/:id',
+    FILE: '/file'
 }
 export const Routes = ()=>{
     return (
@@ -35,7 +42,9 @@ export const Routes = ()=>{
                 <Route path={PATH.PROFILE} render={()=><Profile/>}/>
                 <Route path={PATH.PACKS_LIST} render={()=><PacksList/>}/>
                 <Route path={PATH.CARD} render={()=><Card/>}/>
-
+                <Route path={PATH.LEARN} render={()=><Learn/>}/>
+                <Route path={PATH.MODAL} render={()=><ModalsPage/>}/>
+                <Route path={PATH.FILE} render={()=><File/>}/>
 
             </Switch>
         </>

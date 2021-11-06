@@ -22,7 +22,6 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 
 export const Card = ()=>{
-    console.log('card')
 
     const cards = useSelector<AppRootStateType,Array<CardsType & {editSpan:boolean, editSpanAnswer:boolean}>>(state=>state.card.cards)
     const dispatch = useDispatch()

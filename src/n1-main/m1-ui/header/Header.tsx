@@ -13,6 +13,8 @@ export const Header = ()=>{
             <div className={style.menu_item}><NavLink to={PATH.NEW_PROFILE}>NEW_PROFILE</NavLink></div>
             <div className={style.menu_item}><NavLink to={PATH.PROFILE}>PROFILE</NavLink></div>
             <div className={style.menu_item}><NavLink to={PATH.PACKS_LIST}>PACKS_LIST</NavLink></div>
+            <div className={style.menu_item}><NavLink to={PATH.MODAL}>Modal</NavLink></div>
+            <div className={style.menu_item}><NavLink to={PATH.FILE}>File</NavLink></div>
             <div className={style.menu_btn}>Menu</div>
         </div>
     )

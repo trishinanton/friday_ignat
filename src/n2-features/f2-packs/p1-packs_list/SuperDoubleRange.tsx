@@ -1,5 +1,6 @@
 import React from 'react'
 import {makeStyles, Slider, Typography} from "@material-ui/core";
+import {debounce} from 'lodash'
 
 type SuperDoubleRangePropsType = {
     onChangeRange?: (value: [number, number]) => void
@@ -22,10 +23,13 @@ export const SuperDoubleRange: React.FC<SuperDoubleRangePropsType> = (
 ) => {
     const classes = useStyles();
 
-    const handleChange = (event: any, newValue: number | number[]) =>{
-    onChangeRange && onChangeRange(newValue as [number,number])
+    const handleChange = debounce((event: any, newValue: number | number[]) =>{
+        onChangeRange && onChangeRange(newValue as [number,number])
 
-    }
+    }, 1000)
+
+
+
 
     return (
         <div>

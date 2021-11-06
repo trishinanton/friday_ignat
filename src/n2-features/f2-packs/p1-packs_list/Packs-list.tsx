@@ -18,6 +18,7 @@ import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
 import {PATH} from "../../../n1-main/m1-ui/routes/Routes";
 import {NavLink} from "react-router-dom";
+import {debounce} from 'lodash'
 
 export const PacksList = () =>{
 
@@ -113,7 +114,8 @@ export const PacksList = () =>{
 
     const cardsPackUpdate = {_id:'617581e2078d82123090325a', name:'Anton Trishin'}
     useEffect(()=>{
-        myPacks ? dispatch(packsListTC(idUser)): dispatch(packsListTC())
+        myPacks ? dispatch(packsListTC(idUser)) : dispatch(packsListTC())
+
         // dispatch(packsListTC(idUser))
     },[packName,min,max,sortPacks,page,pageCount,myPacks])
 
@@ -172,10 +174,12 @@ export const PacksList = () =>{
                                     <Button size="small" variant="outlined" color="error">
                                         Delete
                                     </Button>
-                                    <Button size="small" variant="outlined">Small</Button>
+                                    <Button size="small" variant="outlined">
+                                        <NavLink to={'/learn/61866165fd159c1374263049'}>learn</NavLink>
+                                    </Button>
                                     <Button size="small" variant="outlined">
                                         {/*<NavLink to={`/cards/${p._id}`}>card</NavLink>*/}
-                                        <NavLink to={'/cards/617997f7bd19452bf8a9a500'}>card</NavLink>
+                                        <NavLink to={'/cards/61866165fd159c1374263049'}>card</NavLink>
 
                                     </Button>
                                 </div>

@@ -105,7 +105,6 @@ export const setUpdateAnswerAC = (updateAnswer: string, _id:string)=>({
 } as const)
 
 
-
 //action types
 export type setPageActionType = ReturnType<typeof setPageAC>
 export type setShowNumberActionType = ReturnType<typeof setShowNumberAC>
@@ -144,15 +143,17 @@ export const getCardTC = (cardsPack_id: string) => (dispatch: Dispatch, getState
     const cardQuestion = getState().card.cardQuestion
     const cardAnswer = getState().card.cardAnswer
 
+
     cardApi.getCard(cardAnswer,cardQuestion,cardsPack_id,pageNumber,showNumber,filter)
         .then(res => {
             dispatch(setAppStatusAC('succeeded'))
             const cards = res.data.cards.map(i=>({...i, editSpan:false, editSpanAnswer:false}))
             console.log(cards)
             dispatch(setCardsAC(cards))
+
         })
 }
-export const createCardTC = (cardsPack_id: string, question?:string,answer?: string) => (dispatch:ThunkDispatch<AppRootStateType, any, any>, getState: ()=> AppRootStateType) =>{
+export const createCardTC = (cardsPack_id: string, question?:string,answer?: string) => (dispatch:ThunkDispatch<AppRootStateType, void, any>, getState: ()=> AppRootStateType) =>{
     dispatch(setAppStatusAC('loading'))
     const card = {
         cardsPack_id: cardsPack_id,
